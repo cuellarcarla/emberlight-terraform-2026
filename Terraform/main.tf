@@ -191,10 +191,10 @@ resource "aws_security_group" "web" {
   }
 
   ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    cidr_blocks     = ["10.0.0.0/16"]  # Solo desde la VPC
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]  # Solo desde la VPC
   }
 
   egress {
@@ -272,6 +272,9 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = [aws_security_group.web.id]
   key_name               = "vockey"
   user_data              = file("user_data.sh")
+  
+  # LÍNEA CRÍTICA: Fuerza a la máquina a recrearse si cambias el user_data.sh
+  user_data_replace_on_change = true 
 
   tags = {
     Name = "${local.project_name}-web"
