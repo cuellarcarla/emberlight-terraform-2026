@@ -29,7 +29,7 @@ sudo cp -r build/* /var/www/emberlight/
 sudo tee /etc/nginx/sites-available/emberlight > /dev/null <<EOF
 server {
     listen 80;
-    server_name www.emberlight.karura.cat;
+    server_name www.emberlight.mehdi.cat;
 
     location /api/ {
         proxy_pass http://127.0.0.1:8000/api/;
