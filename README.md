@@ -1,1 +1,1 @@
-# emberlight-aws-2026
+# emberlight-terraform-2026
