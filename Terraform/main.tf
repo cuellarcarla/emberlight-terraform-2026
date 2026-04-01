@@ -194,7 +194,7 @@ resource "aws_security_group" "web" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]  # Solo desde la VPC
+    cidr_blocks = ["10.0.0.0/16"]  # Permite SSH desde dentro de la VPC
   }
 
   egress {
@@ -264,17 +264,18 @@ resource "aws_db_instance" "main" {
   }
 }
 
-# Instancia EC2
+# Instancia EC2 (MODIFICADA CON EL PERFIL DE ACADEMY)
 resource "aws_instance" "web" {
-  ami                    = "ami-084568db4383264d4"
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private_1.id
-  vpc_security_group_ids = [aws_security_group.web.id]
-  key_name               = "vockey"
-  user_data              = file("user_data.sh")
-  
-  # LÍNEA CRÍTICA: Fuerza a la máquina a recrearse si cambias el user_data.sh
+  ami                         = "ami-084568db4383264d4"
+  instance_type               = "t2.micro"
+  subnet_id                   = aws_subnet.private_1.id
+  vpc_security_group_ids      = [aws_security_group.web.id]
+  key_name                    = "vockey"
+  user_data                   = file("user_data.sh")
   user_data_replace_on_change = true 
+
+  # Perfil predefinido de AWS Academy
+  iam_instance_profile        = "LabInstanceProfile"
 
   tags = {
     Name = "${local.project_name}-web"
@@ -402,7 +403,7 @@ resource "aws_route53_record" "main" {
   }
 }
 
-# CloudWatch para monitoreo básico
+# CloudWatch
 resource "aws_cloudwatch_metric_alarm" "cpu" {
   alarm_name          = "${local.project_name}-cpu-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -416,6 +417,29 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
   
   dimensions = {
     InstanceId = aws_instance.web.id
+  }
+}
+
+# Endpoint EC2
+resource "aws_security_group" "eic_endpoint_sg" {
+  name        = "${local.project_name}-eic-endpoint-sg"
+  description = "Security Group for EC2 Instance Connect Endpoint"
+  vpc_id      = aws_vpc.main.id
+
+  egress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+}
+
+resource "aws_ec2_instance_connect_endpoint" "main" {
+  subnet_id          = aws_subnet.private_1.id
+  security_group_ids = [aws_security_group.eic_endpoint_sg.id]
+
+  tags = {
+    Name = "${local.project_name}-eic-endpoint"
   }
 }
 
