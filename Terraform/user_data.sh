@@ -1,4 +1,14 @@
 #!/bin/bash
+# Esperar a que la red esté lista (Máximo 10 intentos)
+for i in {1..10}; do
+  if ping -c 1 google.com &> /dev/null; then
+    echo "Internet detectado, procediendo..."
+    break
+  fi
+  echo "Esperando red... (intento $i)"
+  sleep 10
+done
+
 set -e
 
 sudo apt update && sudo apt upgrade -y
