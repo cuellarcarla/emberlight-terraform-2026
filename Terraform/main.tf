@@ -264,7 +264,7 @@ resource "aws_db_instance" "main" {
   }
 }
 
-# Instancia EC2 (MODIFICADA CON EL PERFIL DE ACADEMY)
+# Instancia EC2 
 resource "aws_instance" "web" {
   ami                         = "ami-084568db4383264d4"
   instance_type               = "t2.micro"
