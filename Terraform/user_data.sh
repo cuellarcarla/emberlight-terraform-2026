@@ -28,7 +28,7 @@ python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
 pip install django python-dotenv djangorestframework django-cors-headers psycopg2-binary google-generativeai gunicorn
-# (Aquí deberías ejecutar python manage.py migrate si la DB es nueva)
+# Ejecutar python manage.py migrate , migrar la base de datos local a AWS RDS
 
 # 4. FRONTEND
 cd /home/ubuntu/emberlight-aws/frontend
