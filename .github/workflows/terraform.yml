@@ -10,13 +10,13 @@ jobs:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
 
-    # ESTO ES CLAVE: Le dice a GitHub que entre en tu carpeta "Terraform"
+    # Le dice a GitHub que entre en la carpeta "Terraform" donde esta mi código 
     defaults:
       run:
         working-directory: ./Terraform
 
     steps:
-      # 1. Descarga tu código en la máquina de GitHub
+      # 1. Descarga mi código en la máquina de GitHub
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -24,7 +24,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 3. Configura las credenciales de AWS Academy (usando tus Secrets)
+      # 3. Configura las credenciales de AWS Academy (usando Secrets)
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -33,7 +33,7 @@ jobs:
           aws-session-token: ${{ secrets.SESSION_TOKEN }}
           aws-region: us-east-1
 
-      # 4. Inicializa Terraform (conecta con tu S3 bucket)
+      # 4. Inicializa Terraform (conecta con el S3 bucket)
       - name: Terraform Init
         run: terraform init
 
