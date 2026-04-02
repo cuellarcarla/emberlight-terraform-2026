@@ -19,7 +19,7 @@ cd /home/ubuntu
 git clone https://github.com/cuellarcarla/emberlight-aws.git
 cd emberlight-aws
 
-# 2. REEMPLAZO AUTOMÁTICO DE DOMINIOS (Aquí está la clave)
+# 2. REEMPLAZO AUTOMÁTICO DE DOMINIOS 
 grep -rl "karura.cat" . | xargs sed -i 's/karura.cat/mehdi.cat/g'
 
 # 3. BACKEND
